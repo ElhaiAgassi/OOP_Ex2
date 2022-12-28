@@ -36,7 +36,7 @@ public class Ex2 {
     }
 
     public static class LineCounterThread extends Thread {
-        private String fileName;
+        private final String fileName;
         private int numLines;
 
         public LineCounterThread(String fileName) {
@@ -100,7 +100,7 @@ public class Ex2 {
 }
 
 class LineCounterCallable implements Callable<Integer> {
-    private String fileName;
+    private final String fileName;
 
     public LineCounterCallable(String fileName) {
         this.fileName = fileName;
