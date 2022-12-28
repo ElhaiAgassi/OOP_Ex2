@@ -1,10 +1,5 @@
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
@@ -42,29 +37,6 @@ public class Ex2 {
             }
         }
         return numLines;
-    }
-
-    public static class LineCounterThread extends Thread {
-        private final String fileName;
-        private int numLines;
-
-        public LineCounterThread(String fileName) {
-            this.fileName = fileName;
-        }
-
-        public void run() {
-            try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-                while (br.readLine() != null) {
-                    numLines++;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public int getNumLines() {
-            return numLines;
-        }
     }
 
     public static int getNumOfLinesThreads(String[] fileNames) {
@@ -108,6 +80,30 @@ public class Ex2 {
         return numLines;
     }
 }
+class LineCounterThread extends Thread {
+    private final String fileName;
+    private int numLines;
+
+    public LineCounterThread(String fileName) {
+        this.fileName = fileName;
+    }
+
+    @Override
+    public void run() {
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            while (br.readLine() != null) {
+                numLines++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getNumLines() {
+        return numLines;
+    }
+}
+
 
 class LineCounterCallable implements Callable<Integer> {
     private final String fileName;

@@ -2,10 +2,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Arrays;
 
 class Ex2Test {

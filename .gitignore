@@ -1,8 +1,2 @@
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/OOP_Ex2.iml
-/.idea/vcs.xml
-/out/production/OOP_Ex2/Ex2$LineCounterThread.class
-/out/production/OOP_Ex2/Ex2.class
-/out/production/OOP_Ex2/LineCounterCallable.class
-/.idea/inspectionProfiles/Project_Default.xml
+/.idea/
+/out/
