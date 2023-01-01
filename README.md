@@ -1,4 +1,4 @@
-# OOP_Ex2
+# OOP_Ex2-THREADS
 _________
 
 Welcome to the Ex2 project!
