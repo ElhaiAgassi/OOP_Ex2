@@ -1,5 +1,6 @@
 # OOP_Ex2
 Welcome to the Ex2 project!
+
 This project provides a set of utility functions for working with text files.
 In general: we create several text files and calculate the total number of lines in these files.
 
