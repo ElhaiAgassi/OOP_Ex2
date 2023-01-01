@@ -51,6 +51,28 @@ After all the tasks have completed, the results are summed up to get the total n
 
 To use the Ex2 project, simply import the class into your project and call the desired
 
+_______
+
+# Time Complexity
+
+It is important to understand the differences in running times because it can help determine which method is most efficient and suitable for a given task.
+
+- Method 4, getNumOfLinesThreadPool: ThreadPool
+
+This method creates a fixed number of threads that are reused to execute the tasks. When a task is submitted to the thread pool, a thread is taken from the pool and used to execute the task. When the task is finished, the thread is returned to the pool. This can lead to improved performance because it reduces the overhead of creating and destroying threads.
+
+- Method 3, getNumOfLinesThreads: Multi-Thread
+
+Each text file is assigned to a separate thread, and the threads run concurrently to count the lines in the text files. This method may not be as efficient as method 4 because it creates a new thread for each text file, which can lead to increased overhead.
+
+- Method 2, getNumOfLines: Single-Thread
+
+This method may be slower than the other two methods because it only uses one thread to count the lines in all of the text files.
+
+In general, the running time of the methods will depend on the number and size of the text files, the number of available processors, and the workload of the system. To compare the running times of the methods accurately, a large number of 
+
+_______
+
 
 # UML 
 
