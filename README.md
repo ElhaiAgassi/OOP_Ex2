@@ -53,7 +53,7 @@ To use the Ex2 project, simply import the class into your project and call the d
 
 _______
 
-# Time Complexity
+# Running Time
 
 It is important to understand the differences in running times because it can help determine which method is most efficient and suitable for a given task.
 
