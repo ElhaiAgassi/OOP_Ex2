@@ -34,7 +34,9 @@ ______________
 The getNumOfLinesThreadPool function counts the number of lines in a given array of text files using a fixed thread pool. It creates a class that implements the Callable interface and overrides the call method to count the lines in a specific file. The function takes in a String array containing the names of the text files and returns the total number of lines in all the files.
 
 A fixed thread pool with a size equal to the length of the input fileNames array is created using the Executors class. For each file in the array, a new LineCounterCallable instance is created and submitted to the thread pool. The LineCounterCallable class implements the Callable interface and has a call method that reads the file line by line and increments a counter for each line. The call method returns the final value of the counter as the result.
+
 ----
+
 After all the tasks have completed, the results are summed up to get the total number of lines in all the files. The thread pool is then shut down.
 
 To use the Ex2 project, simply import the class into your project and call the desired
