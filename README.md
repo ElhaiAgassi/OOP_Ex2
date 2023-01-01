@@ -70,6 +70,13 @@ Each text file is assigned to a separate thread, and the threads run concurrentl
 This method may be slower than the other two methods because it only uses one thread to count the lines in all of the text files.
 
 In general, the running time of the methods will depend on the number and size of the text files, the number of available processors, and the workload of the system. To compare the running times of the methods accurately, a large number of 
+After a number of tests it can be seen that:
+As it is a large number of files, we saw that single-thread takes the most time compared to multi-thread and Threadpool which compete with each other for the best running time.
+Most of the time, threadpool will "win".
+As it is a small number of files, single-thread will perform the best running time, multi-thread after it and then with the worst running time will be the thread-pool.
+
+<img width="533" alt="image" src="https://user-images.githubusercontent.com/92378800/210172956-79dc85b3-2162-4d51-b5a1-fa538815f076.png">
+
 
 _______
 
