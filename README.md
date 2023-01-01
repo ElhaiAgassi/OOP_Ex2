@@ -4,9 +4,12 @@ This project provides a set of utility functions for working with text files.
 In general: we create several text files and calculate the total number of lines in these files.
 
   We will use three methods:
-• Normal method without the use of threads
-• Using of threads
-• Using ThreadPool
+  
+•  Normal method without the use of threads
+
+•  Using of threads
+
+•  Using ThreadPool
 
 ## createTextFiles
 
