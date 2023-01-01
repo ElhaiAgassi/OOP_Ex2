@@ -52,4 +52,7 @@ After all the tasks have completed, the results are summed up to get the total n
 To use the Ex2 project, simply import the class into your project and call the desired
 
 
+# UML 
+
+<img width="412" alt="image" src="https://user-images.githubusercontent.com/92378800/210171483-007ea10a-1f37-43a1-a2a9-09c6df35fcb2.png">
 
