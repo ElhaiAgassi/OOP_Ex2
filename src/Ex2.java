@@ -4,9 +4,20 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
 
+
+/**
+ * Class for creating text files and counting the number of lines in a set of text files.
+ */
+
 public class Ex2 {
 
-
+    /**
+     * Creates n text files with random number of lines, from 0 to bound-1, with a seed value for the random generator.
+     * @param n the number of text files to create
+     * @param seed the seed value for the random generator
+     * @param bound the maximum number of lines for each text file
+     * @return an array of strings representing the names of the text files created
+     */
     public static String[] createTextFiles(int n, int seed, int bound) {
         String[] fileNames = new String[n];
         Random rand = new Random(seed);
@@ -25,6 +36,12 @@ public class Ex2 {
         return fileNames;
     }
 
+    /**
+     * Counts the number of lines in a set of text files using a single thread.
+     * @param fileNames an array of strings representing the names of the text files
+     * @return the total number of lines in the text files
+     */
+
     public static int getNumOfLines(String[] fileNames) {
         int numLines = 0;
         for (String fileName : fileNames) {
@@ -39,6 +56,11 @@ public class Ex2 {
         return numLines;
     }
 
+    /**
+     * Counts the number of lines in a set of text files using multiple threads.
+     * @param fileNames an array of strings representing the names of the text files
+     * @return the total number of lines in the text files
+     */
     public static int getNumOfLinesThreads(String[] fileNames) {
         LineCounterThread[] threads = new LineCounterThread[fileNames.length];
         for (int i = 0; i < fileNames.length; i++) {
@@ -58,6 +80,12 @@ public class Ex2 {
         return numLines;
     }
 
+    /**
+
+     Counts the number of lines in a set of text files using a thread pool.
+     @param fileNames an array of strings representing the names of the text files
+     @return the total number of lines in the text files
+     */
 
     public static int getNumOfLinesThreadPool(String[] fileNames) {
         ExecutorService threadPool = Executors.newFixedThreadPool(fileNames.length);
@@ -80,13 +108,25 @@ public class Ex2 {
         return numLines;
     }
 }
+
+/**
+ A class that implements a thread for counting the number of lines in a text file.
+ */
+
 class LineCounterThread extends Thread {
     private final String fileName;
     private int numLines;
+    /**
+     Constructs a new LineCounterThread instance.
+     @param fileName the name of the file to count the lines from
+     */
 
     public LineCounterThread(String fileName) {
         this.fileName = fileName;
     }
+    /**
+     Reads through the file and counts the number of lines.
+     */
 
     @Override
     public void run() {
@@ -99,18 +139,36 @@ class LineCounterThread extends Thread {
         }
     }
 
+    /**
+     Returns the number of lines counted by this thread.
+     @return the number of lines counted
+     */
+
     public int getNumLines() {
         return numLines;
     }
 }
 
+/**
+ A class that implements a Callable for counting the number of lines in a text file.
+ */
 
 class LineCounterCallable implements Callable<Integer> {
     private final String fileName;
 
+    /**
+     Constructs a new LineCounterCallable instance.
+     @param fileName the name of the file to count the lines from
+     */
+
     public LineCounterCallable(String fileName) {
         this.fileName = fileName;
     }
+
+    /**
+     Reads through the file and counts the number of lines.
+     @return the number of lines counted
+     */
 
     @Override
     public Integer call() {
