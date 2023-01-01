@@ -1,4 +1,6 @@
 # OOP_Ex2
+_________
+
 Welcome to the Ex2 project!
 
 This project provides a set of utility functions for working with text files.
