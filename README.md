@@ -1,6 +1,6 @@
 # OOP_Ex2
 Welcome to the Ex2 project! This project provides a set of utility functions for working with text files.
-___________
+
 
 # createTextFiles
 
@@ -14,18 +14,21 @@ The seed and bound parameters are used to generate a random number of lines for 
 
 The function returns a String array containing the names of the created files. The file names are in the format "my_file1.txt", "my_file2.txt", and so on.
 ____________
+
 # getNumOfLines
 
 The getNumOfLines function counts the number of lines in a given array of text files. It takes in a String array containing the names of the text files and returns the total number of lines in all the files.
 
 This function reads each file in the input array line by line using a BufferedReader, and increments a counter for each line. After all the files have been processed, the final value of the counter is returned as the result.
 _____________
+
 # getNumOfLinesThreads
 
 The getNumOfLinesThreads function counts the number of lines in a given array of text files using a separate thread for each file. It extends the Thread class and overrides the run method to count the lines in a specific file. The function takes in a String array containing the names of the text files and returns the total number of lines in all the files.
 
 For each file in the input array, a new LineCounterThread instance is created and started. The LineCounterThread class extends Thread and has a run method that reads the file line by line and increments a counter for each line. After all the threads have completed, the final value of the counter is returned as the result.
 ______________
+
 # getNumOfLinesThreadPool
 
 The getNumOfLinesThreadPool function counts the number of lines in a given array of text files using a fixed thread pool. It creates a class that implements the Callable interface and overrides the call method to count the lines in a specific file. The function takes in a String array containing the names of the text files and returns the total number of lines in all the files.
