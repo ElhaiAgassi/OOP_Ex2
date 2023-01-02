@@ -76,8 +76,7 @@ After a number of tests it can be seen that:
 As it is a large number of files, we saw that single-thread takes the most time compared to multi-thread and Threadpool which compete with each other for the best running time.
 Most of the time, threadpool will "win".
 As it is a small number of files, single-thread will perform the best running time, multi-thread after it and then with the worst running time will be the thread-pool.
-
-<img width="533" alt="image" src="https://user-images.githubusercontent.com/92378800/210172956-79dc85b3-2162-4d51-b5a1-fa538815f076.png">
+<img width="737" alt="image" src="https://user-images.githubusercontent.com/92378800/210207320-eb4b65f8-cae4-4a84-a88a-64715ce01e9e.png">
 
 
 _______
