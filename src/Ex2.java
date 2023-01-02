@@ -38,6 +38,8 @@ public class Ex2 {
 
     /**
      * Counts the number of lines in a set of text files using a single thread.
+     * This code executes in a single thread, meaning that the line counting for each file is done
+     * sequentially rather than in parallel.
      * @param fileNames an array of strings representing the names of the text files
      * @return the total number of lines in the text files
      */
@@ -62,15 +64,19 @@ public class Ex2 {
      * @return the total number of lines in the text files
      */
     public static int getNumOfLinesThreads(String[] fileNames) {
+        // a new thread is created for each file name in the fileNames array
+        //LineCounterThread class is a custom class that extends the Thread class
         LineCounterThread[] threads = new LineCounterThread[fileNames.length];
         for (int i = 0; i < fileNames.length; i++) {
             threads[i] = new LineCounterThread(fileNames[i]);
+            // start() is called, means that the line counting for each file will be done in parallel by different threads.
             threads[i].start();
         }
 
         int numLines = 0;
         for (LineCounterThread thread : threads) {
             try {
+                //join() method,causes the main thread to block until the line counting thread has completed
                 thread.join();
                 numLines += thread.getNumLines();
             } catch (InterruptedException e) {
@@ -88,11 +94,14 @@ public class Ex2 {
      */
 
     public static int getNumOfLinesThreadPool(String[] fileNames) {
+        //The size of the thread pool is set to the length of the fileNames array
         ExecutorService threadPool = Executors.newFixedThreadPool(fileNames.length);
-
         List<Future<Integer>> missions = new ArrayList<>();
         for (String fileName : fileNames) {
+            //The Callable interface is similar to the Runnable interface, but it allows a thread to return a result
+            // new LineCounterCallable instance is created and submitted to the thread pool using the submit() method of the ExecutorService.
             LineCounterCallable task = new LineCounterCallable(fileName);
+            //submit() method returns a Future object that stored in a list
             missions.add(threadPool.submit(task));
         }
 
