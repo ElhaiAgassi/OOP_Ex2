@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 public class Tests {
         public static final Logger logger = (Logger) LoggerFactory.getLogger(Tests.class);
         @Test
-        public void partialTest(){
+        public void partialTest() throws InterruptedException {
             CustomExecutor customExecutor = new CustomExecutor();
             var task = Task.createTask(()->{
                 int sum = 0;
@@ -54,4 +54,3 @@ public class Tests {
             customExecutor.gracefullyTerminate();
         }
     }
-
