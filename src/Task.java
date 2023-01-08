@@ -1,31 +1,46 @@
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
-public class Task<T> implements Callable<T> {
+public class Task<T> implements Comparable<Task<T>> {
+    private Callable<T> operation;
+    private TaskType type;
+    private T result;
+    private Exception exception;
 
-    private final TaskType taskType;
-    private final int priority;
-    private final Callable<T> operation;
-
-    private Task(TaskType taskType, Callable<T> operation) {
-        this.taskType = taskType;
-        this.priority = taskType.getPriorityValue();
+    private Task(Callable<T> operation, TaskType type) {
         this.operation = operation;
+        this.type = type;
     }
 
-    public static <T> Task<T> of(TaskType taskType, Callable<T> operation) {
-        return new Task<>(taskType, operation);
+    public static <T> Task<T> createTask(Callable<T> operation, TaskType type) {
+        return new Task<>(operation, type);
     }
 
-    public TaskType getTaskType() {
-        return taskType;
+    public static <T> Task<T> createTask(Callable<T> operation) {
+        return new Task<>(operation, TaskType.OTHER);
+    }
+
+    public T get() throws ExecutionException {
+        if (exception != null) {
+            throw new ExecutionException(exception);
+        }
+        return result;
+    }
+
+    void setResult(T result) {
+        this.result = result;
+    }
+
+    void setException(Exception exception) {
+        this.exception = exception;
     }
 
     public int getPriority() {
-        return priority;
+        return type.getPriorityValue();
     }
 
     @Override
-    public T call() throws Exception {
-        return operation.call();
+    public int compareTo(Task<T> other) {
+        return Integer.compare(getPriority(), other.getPriority());
     }
 }
