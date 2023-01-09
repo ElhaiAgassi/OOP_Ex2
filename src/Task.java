@@ -1,68 +1,96 @@
 import java.util.concurrent.*;
 
-public class Task<T> implements Callable<T>, Comparable<Task<T>> {
-    private Callable<T> operation;
-    private TaskType type; // the type of the mission
-    private T result;
+public class Task<V> implements Callable<V>, Future<V>,Runnable, Comparable<Task<V>> {
+    private final Callable<V> callable;
+    private final TaskType type;
+    private V result;
     private Exception exception;
-    private Future<T> future;
+    private volatile boolean isDone;
+    private volatile boolean isCancelled;
 
-    private Task(Callable<T> operation, TaskType type) {
-        this.operation = operation;
+    Task(Callable<V> callable, TaskType type) {
+        this.callable = callable;
         this.type = type;
     }
 
-
-    public static <T> Task<T> createTask(Callable<T> operation, TaskType type) {
-        return new Task<>(operation, type);
+    public static <V> Task<V> createTask(Callable<V> callable, TaskType type) {
+        return new Task<>(callable, type);
     }
 
-    public static <T> Task<T> createTask(Callable<T> operation) {
-        return new Task<>(operation, TaskType.OTHER);
+    public static <V> Task<V> createTask(Callable<V> callable) {
+        return new Task<>(callable, TaskType.OTHER);
     }
 
-
-    public void setFuture(Future<T> future) {
-        this.future = future;
-    }
-
-    public T get() throws ExecutionException, InterruptedException {
-        if (exception != null) {
-            throw new ExecutionException(exception);
+    @Override
+    public V call() throws Exception {
+        try {
+            result = callable.call();
+        } catch (Exception e) {
+            exception = e;
+            throw e;
         }
-        return future.get();
+        isDone = true;
+        return result;
+    }
+
+    @Override
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        if (isDone) {
+            return false;
+        }
+        isCancelled = true;
+        return true;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return isCancelled;
+    }
+
+    @Override
+    public boolean isDone() {
+        return isDone;
+    }
+
+    @Override
+    public V get() {
+        if (exception != null) {
+            try {
+                throw exception;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
 
-    void setResult(T result) {
-        this.result = result;
+    @Override
+    public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+        try {
+            return get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
-    void setException(Exception exception) {
-        this.exception = exception;
-    }
+
 
     public int getPriority() {
         return type.getPriorityValue();
     }
 
     @Override
-    public int compareTo(Task<T> other) {
-        return Integer.compare(getPriority(), other.getPriority());
-    }
-
-    public T run() throws Exception {
-        try {
-            result = operation.call();
-        } catch (Exception e) {
-            exception = e;
-            throw e;
-        }
-        return result;
+    public int compareTo(Task<V> o) {
+        return Integer.compare(getPriority(), o.getPriority());
     }
 
     @Override
-    public T call() throws Exception {
-        return null;
-    }
+    public void run() {
+        try {
+            result = callable.call();
+        } catch (Exception e) {
+            exception = e;
+        }}
 }
