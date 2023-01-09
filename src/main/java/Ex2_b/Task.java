@@ -1,24 +1,22 @@
 package Ex2_b;
 
-import java.util.concurrent.Callable;
+import java.util.concurrent.*;
 
-public class Task<V> implements Callable<V>, Comparable<Task<V>>, Runnable {
+public class Task<V> implements Callable<V>, Comparable<Task<V>>  {
     private final Callable<V> callable;
     private final TaskType type;
-    private final int priority;
 
-    public static <V> Task<V> createTask(Callable<V> callable, TaskType type) {
-        return new Task<>(callable, type, 0);
-    }
-
-    public static <V> Task<V> createTask(Callable<V> callable, TaskType type, int priority) {
-        return new Task<>(callable, type, priority);
-    }
-
-    private Task(Callable<V> callable, TaskType type, int priority) {
+    Task(Callable<V> callable, TaskType type) {
         this.callable = callable;
         this.type = type;
-        this.priority = priority;
+    }
+
+    public static <V> Task<V> createTask(Callable<V> callable, TaskType type) {
+        return new Task<>(callable, type);
+    }
+
+    public static <V> Task<V> createTask(Callable<V> callable) {
+        return new Task<>(callable, TaskType.OTHER);
     }
 
     @Override
@@ -26,25 +24,15 @@ public class Task<V> implements Callable<V>, Comparable<Task<V>>, Runnable {
         return callable.call();
     }
 
-    public TaskType getType() {
-        return type;
-    }
 
     public int getPriority() {
-        return priority;
+        return type.getPriorityValue();
     }
 
     @Override
-    public int compareTo(Task<V> other) {
-        return Integer.compare(this.getPriority(), other.getPriority());
+    public int compareTo(Task<V> o) {
+        return Integer.compare(getPriority(), o.getPriority());
     }
 
-    @Override
-    public void run() {
-        try {
-            call();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 }
