@@ -1,5 +1,9 @@
+package Ex2_a;
+
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+
 
 import java.io.File;
 import java.util.Arrays;
@@ -8,8 +12,8 @@ class Ex2Test {
 
     static String[] flList;
 
-    @BeforeAll
-    static void start() {
+    @Test
+    void start() {
         flList = Ex2.createTextFiles(10000, 100, 100);
 
         Utilities.timeCounter("getNumOfLines", flList);

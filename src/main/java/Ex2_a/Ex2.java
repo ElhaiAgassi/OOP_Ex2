@@ -1,3 +1,5 @@
+package Ex2_a;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +67,7 @@ public class Ex2 {
      */
     public static int getNumOfLinesThreads(String[] fileNames) {
         // a new thread is created for each file name in the fileNames array
-        //LineCounterThread class is a custom class that extends the Thread class
+        //Ex2_a.LineCounterThread class is a custom class that extends the Thread class
         LineCounterThread[] threads = new LineCounterThread[fileNames.length];
         for (int i = 0; i < fileNames.length; i++) {
             threads[i] = new LineCounterThread(fileNames[i]);
@@ -99,12 +101,11 @@ public class Ex2 {
         List<Future<Integer>> missions = new ArrayList<>();
         for (String fileName : fileNames) {
             //The Callable interface is similar to the Runnable interface, but it allows a thread to return a result
-            // new LineCounterCallable instance is created and submitted to the thread pool using the submit() method of the ExecutorService.
+            // new Ex2_a.LineCounterCallable instance is created and submitted to the thread pool using to submit() method of the ExecutorService.
             LineCounterCallable task = new LineCounterCallable(fileName);
             //submit() method returns a Future object that stored in a list
             missions.add(threadPool.submit(task));
         }
-
         int numLines = 0;
         for (Future<Integer> mission : missions) {
             try {
@@ -126,7 +127,7 @@ class LineCounterThread extends Thread {
     private final String fileName;
     private int numLines;
     /**
-     Constructs a new LineCounterThread instance.
+     Constructs a new Ex2_a.LineCounterThread instance.
      @param fileName the name of the file to count the lines from
      */
 
@@ -166,7 +167,7 @@ class LineCounterCallable implements Callable<Integer> {
     private final String fileName;
 
     /**
-     Constructs a new LineCounterCallable instance.
+     Constructs a new Ex2_a.LineCounterCallable instance.
      @param fileName the name of the file to count the lines from
      */
 
@@ -180,17 +181,14 @@ class LineCounterCallable implements Callable<Integer> {
      */
 
     @Override
-    public Integer call() {
+    public Integer call() throws IOException {
         int numLines = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            while (br.readLine() != null) {
-                numLines++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+        while (br.readLine() != null) {
+            numLines++;
         }
+        br.close();
         return numLines;
-
     }
 }
 
