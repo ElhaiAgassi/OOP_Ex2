@@ -4,6 +4,7 @@ Authors @ElhaiAgassi & @Danielle Musai
 ## Welcome to the Ex2 project!
 
 <img width="317" alt="image" src="https://user-images.githubusercontent.com/92378800/211576757-c364f245-e4bf-46ef-9fc0-0fb2920d5cba.png">
+
 _________
 # Part A
 
