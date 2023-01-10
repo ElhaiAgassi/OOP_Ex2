@@ -147,6 +147,15 @@ gracefullyTerminate() - method which is used to shutdown the scheduler and execu
 getCurrentMax() - method that returns the max priority of queued tasks.
   
 Overall, the Task and CustomExecutor classes demonstrate how to use threads in Java by providing a way to execute units of work concurrently, prioritize tasks, and manage the lifecycle of threads in a controlled environment.
+
+## Design Patterns
+  - Factory:
+  In the Task class, where the class provides static factory methods createTask which creates new objects of the class. 
+  This allows the caller to create new objects of the class without having to use the constructor directly.
+  
+  - Template:
+  The template method pattern is used in the CustomExecutor class, with the method submitTask(Callable<V> task) which act as a template method that defines an           algorithm as a skeleton of methods that subclasses can override to build their own implementations, 
+  but also rely on the implemented methods in the super class for the common behavior.
   
 ## S.O.L.I.D
   
