@@ -100,9 +100,14 @@ ____
 (based on the enum class we got 'TaskType')
 
 This is implements two interfaces: Callable and Comparable
-Callable is an interface that's similar to Runnable, but it can return a value or throw an exception.
-Comparable is an interface that allows an object to be compared to other objects of the same type. The compareTo() method, which is also defined in the Comparable interface, is overridden here to compare the priority of the current task to that of another task passed in as an argument. The priority is determined by the TaskType enum, which is passed in to the constructor and stored as a field.
-The class also has two static methods to create a Task object. createTask(Callable<V> callable, Ex2_b.TaskType type) will create a task object by providing the callable object and task type, and createTask(Callable<V> callable) will create a task object by providing the callable object and default task type as Ex2_b.TaskType.OTHER.
+*Callable is an interface that's similar to Runnable, but it can return a value or throw an exception.
+*Comparable is an interface that allows an object to be compared to other objects of the same type.
+The compareTo() method, which is also defined in the Comparable interface, is overridden here to compare the priority of the current task to that of another task passed in as an argument. 
+The priority is determined by the TaskType enum, which is passed in to the constructor and stored as a field.
+
+The class also has two static methods to create a Task object. createTask(Callable<V> callable, Ex2_b.TaskType type) will create a task object by providing the callable object and task type,
+and createTask(Callable<V> callable) will create a task object by providing the callable object and default task type as Ex2_b.TaskType.OTHER.
+  
 In summary this class implements the Callable interface so that it can be used in a thread pool, and also implements the Comparable interface so that it can be sorted based on priority.
   
  ____
