@@ -94,7 +94,7 @@ _________
 Our goal at this part of the project is to  create a new two types that extend the functionality of Javas Concurrency Framework.
 Create a new type that provides an asynchronous task with priority and a ThreadPool type that supports tasks priority.
 
-We create a two classes:
+We created a two classes:
 Task & CustomExecutor
 ____
 ## Task
@@ -132,7 +132,13 @@ The class also maintains a state variable shutdown which is an instance of Atomi
 
 When creating a new instance of the CustomExecutor class, it initializes a new PriorityBlockingQueue, creates a fixed thread pool using Executors.newFixedThreadPool(), creates a scheduled thread pool using Executors.newScheduledThreadPool(), schedules a task that kills excess idle threads, and sets the atomic boolean shutdown to false.
 
-The class provides the submit(Task<V> task) method which submits a task to the priority queue and thread pool.
-gracefullyTerminate() - method which is used to shutdown the scheduler and executor gracefully and sets the shutdown flag to true. getCurrentMax() - method that returns the max priority of queued tasks.
+The class provides the submit method:
+- A Task instance
+- An operation that may return a value. It will then be used for creating a Task instance
+- An operation that may return a value and a TaskType. It will then be used for creating a
+  Task instance
+
+gracefullyTerminate() - method which is used to shutdown the scheduler and executor gracefully and sets the shutdown flag to true. 
+getCurrentMax() - method that returns the max priority of queued tasks.
   
 
