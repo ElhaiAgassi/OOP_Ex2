@@ -1,8 +1,9 @@
+Authors @ElhaiAgassi & @Danielle Musai
+
 # OOP_Ex2-THREADS
 ## Welcome to the Ex2 project!
 
-<img width="375" alt="image" src="https://user-images.githubusercontent.com/92378800/211575471-765385b4-0c02-4b01-8588-d957616338a4.png">
-
+<img width="203" alt="image" src="https://user-images.githubusercontent.com/92378800/211576576-6e6fc9bd-c6f6-4aa9-8fad-b6b2ea913bba.png">
 
 _________
 # Part A
