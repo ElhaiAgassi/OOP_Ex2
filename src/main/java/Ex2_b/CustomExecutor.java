@@ -15,23 +15,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @see ScheduledExecutorService
  */
 
-/**
- * MIN_THREADS - the number of threads to keep in the pool, even if they are idle to be half the number of
- * processors available for the Java Virtual Machine (JVM)
- *
- * MAX_THREADS - the maximum number of threads to allow in the pool, equal to the number of processors
- * available for the Java Virtual Machine (JVM) minus 1
- *
- * IDLE_TIMEOUT = 3000L - the maximum time that excess idle threads will wait for new tasks before terminating
- *
- * PriorityBlockingQueue<Task<?>> queue - priority queue to hold the queue of tasks
- *
- * ExecutorService executor - Executor service to handle threads
- *
- * ScheduledExecutorService scheduler - Scheduler service to handle background task that periodically kills excess idle threads
- *
- * AtomicBoolean shutdown- Used to ensure that only once the executor is shut down
- */
 public class CustomExecutor {
     /** the number of threads to keep in the pool, even if they are idle to be half the number of
      *processors available for the Java Virtual Machine (JVM)
