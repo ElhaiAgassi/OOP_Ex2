@@ -3,8 +3,7 @@ Authors @ElhaiAgassi & @Danielle Musai
 # OOP_Ex2-THREADS
 ## Welcome to the Ex2 project!
 
-<img width="203" alt="image" src="https://user-images.githubusercontent.com/92378800/211576576-6e6fc9bd-c6f6-4aa9-8fad-b6b2ea913bba.png">
-
+<img width="317" alt="image" src="https://user-images.githubusercontent.com/92378800/211576757-c364f245-e4bf-46ef-9fc0-0fb2920d5cba.png">
 _________
 # Part A
 
