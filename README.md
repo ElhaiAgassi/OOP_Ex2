@@ -148,6 +148,20 @@ getCurrentMax() - method that returns the max priority of queued tasks.
   
 Overall, the Task and CustomExecutor classes demonstrate how to use threads in Java by providing a way to execute units of work concurrently, prioritize tasks, and manage the lifecycle of threads in a controlled environment.
   
+## S.O.L.I.D
+  
+In terms of SOLID principles, it appears that the Single Responsibility Principle is being followed. 
+The Task class is responsible for wrapping a callable object and providing a way to compare its priority with other tasks. 
+The CustomExecutor class is responsible for managing the thread pool and task queue.
+Also, there are some indication of open-closed principle since the class Task is open for extension and closed for modification, and they are using Factory Method to generate the object .
+The Liskov Substitution Principle states that objects of a superclass should be able to be replaced with objects of a subclass without affecting the correctness of the program.
+
+In this 2 classes, this is demonstrated by the use of interfaces and abstract classes.
+
+The Task class is a generic class that implements the Callable and Comparable interfaces. This allows it to be used as a replacement for any other class that also implements these interfaces, as long as it meets the same contract. In other words, it guarantees that any class that implements Callable and Comparable can be used in place of Task.
+
+The CustomExecutor is using ExecutorService and PriorityBlockingQueue classes and since those class are providing a clear interface and abstraction, it makes sure that it is using those classes in a way that any other class that implements the same interfaces and abstract classes can be used in place of the current classes.
+
 ## UML
   ![image](https://user-images.githubusercontent.com/92378800/211555593-739c7be3-dea3-4ab3-a6d1-4a71207a4ec3.png)
 
