@@ -104,6 +104,8 @@ This is implements two interfaces: Callable and Comparable
 *Callable is an interface that's similar to Runnable, but it can return a value or throw an exception.
 *Comparable is an interface that allows an object to be compared to other objects of the same type.
 The compareTo() method, which is also defined in the Comparable interface, is overridden here to compare the priority of the current task to that of another task passed in as an argument. 
+This is important when multiple tasks are queued and we want to ensure that the most important tasks are executed first.
+
 The priority is determined by the TaskType enum, which is passed in to the constructor and stored as a field.
 
 The class also has two static methods to create a Task object. createTask(Callable<V> callable, Ex2_b.TaskType type) will create a task object by providing the callable object and task type,
@@ -132,7 +134,10 @@ The class also maintains a state variable shutdown which is an instance of Atomi
 
 When creating a new instance of the CustomExecutor class, it initializes a new PriorityBlockingQueue, creates a fixed thread pool using Executors.newFixedThreadPool(), creates a scheduled thread pool using Executors.newScheduledThreadPool(), schedules a task that kills excess idle threads, and sets the atomic boolean shutdown to false.
 
-The class provides the submit method:
+When we want to execute a task, we can use the CustomExecutor class's submit() method to add it to the queue.
+The CustomExecutor will then take care of getting a thread from the pool and running the task.
+  
+The submit method:
 - A Task instance
 - An operation that may return a value. It will then be used for creating a Task instance
 - An operation that may return a value and a TaskType. It will then be used for creating a
@@ -140,5 +145,7 @@ The class provides the submit method:
 
 gracefullyTerminate() - method which is used to shutdown the scheduler and executor gracefully and sets the shutdown flag to true. 
 getCurrentMax() - method that returns the max priority of queued tasks.
+  
+Overall, the Task and CustomExecutor classes demonstrate how to use threads in Java by providing a way to execute units of work concurrently, prioritize tasks, and manage the lifecycle of threads in a controlled environment.
   
 
