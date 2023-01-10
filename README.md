@@ -148,4 +148,6 @@ getCurrentMax() - method that returns the max priority of queued tasks.
   
 Overall, the Task and CustomExecutor classes demonstrate how to use threads in Java by providing a way to execute units of work concurrently, prioritize tasks, and manage the lifecycle of threads in a controlled environment.
   
+## UML
+  ![image](https://user-images.githubusercontent.com/92378800/211555593-739c7be3-dea3-4ab3-a6d1-4a71207a4ec3.png)
 
