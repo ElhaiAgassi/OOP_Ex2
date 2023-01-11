@@ -3,9 +3,9 @@ _Authors [@ElhaiAgassi]() & [@Danielle Musai](https://github.com/DanielleMusai)_
 
 
 
-# <p align="center"> __THREADS__ </p>
+# <p align="center"> :black_medium_square: THREADS :black_medium_square: </p>
                                            
-## <p align="center"> Welcome to the Ex2 project! </p>                                                        
+## <p align="center"> Welcome to the Ex2 project :v:  </p>                                                        
 
 <p align="center">
 <img width="317" alt="image" src="https://user-images.githubusercontent.com/92378800/211576757-c364f245-e4bf-46ef-9fc0-0fb2920d5cba.png">
@@ -13,7 +13,7 @@ _Authors [@ElhaiAgassi]() & [@Danielle Musai](https://github.com/DanielleMusai)_
 
 
 
-# Part A
+# Part A :arrow_down:
 
 This part of the project provides a set of utility functions for working with text files.
 In general: we create several text files and calculate the total number of lines in these files.
@@ -96,7 +96,7 @@ _______
 
 
 _________
-# Part B
+# Part B :arrow_down:
 
 Our goal at this part of the project is to  create a new two types that extend the functionality of Javas Concurrency Framework.
 Create a new type that provides an asynchronous task with priority and a ThreadPool type that supports tasks priority.
