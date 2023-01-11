@@ -13,7 +13,7 @@ public class TaskTest {
     /**
      * check if the queue add by priority,
      * set core and max to be 1, because we need
-     * that task get in the workqueue.
+     * that task get in the work queue.
      * Print - print the priorities og the queue's tasks
      * by the order in the queue
      */
@@ -33,7 +33,7 @@ public class TaskTest {
             var sumTask = customExecutor.submit(task);
             final int sum;
             try {
-                sum = (int)sumTask.get(1, TimeUnit.MILLISECONDS);
+                sum = sumTask.get(1, TimeUnit.MILLISECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
                 throw new RuntimeException(e);
             }

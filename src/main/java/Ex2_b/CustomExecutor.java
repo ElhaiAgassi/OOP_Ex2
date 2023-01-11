@@ -3,7 +3,6 @@ package main.java.Ex2_b;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static java.util.Objects.requireNonNull;
 
 /**
  * The CustomExecutor  class is responsible for managing a threadPool
