@@ -13,16 +13,16 @@ import java.util.concurrent.*;
         */
 
 
-public class Task<V> implements Callable<V>, Comparable<Task<V>>  {
-    private final Callable<V> callable;
+public class Task<V> extends FutureTask<V> implements Comparable<Task<V>>  {
     /**
      * Holds the callable object that contains the unit of work to be executed
      */
-    private final TaskType type;
+    private final Callable<V> callable;
+
     /**
      * Holds the type of task, which determines the priority
      */
-
+    private final TaskType type;
 
     /**
      * Creates a new task with the provided callable object and task type.
@@ -32,8 +32,10 @@ public class Task<V> implements Callable<V>, Comparable<Task<V>>  {
      */
 
     Task(Callable<V> callable, TaskType type) {
+        super(callable);
         this.callable = callable;
         this.type = type;
+
     }
 
     /**
@@ -61,15 +63,14 @@ public class Task<V> implements Callable<V>, Comparable<Task<V>>  {
         return new Task<>(callable, TaskType.OTHER);
     }
 
-    @Override
     /**
      * Executes the callable object and returns the result.
      *
      * @return result returned by callable
      * @throws Exception the callable may throw an exception
     */
-    public V call() throws Exception {
-        return callable.call();
+    public Callable<V> getCallable() throws Exception {
+        return callable;
     }
 
     /**
@@ -79,8 +80,9 @@ public class Task<V> implements Callable<V>, Comparable<Task<V>>  {
      */
 
     public int getPriority() {
-        return type.getPriorityValue();
+        return type.getPriorityTypeValue();
     }
+
 
 
     @Override

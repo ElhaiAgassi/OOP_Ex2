@@ -1,4 +1,5 @@
-package Ex2_b;
+package main.java.Ex2_b;
+
 
 public enum TaskType {
 
@@ -16,7 +17,7 @@ public enum TaskType {
     };
 
     private int typePriority;
-    private TaskType(int priority){
+    TaskType(int priority){
         if (validatePriority(priority)) typePriority = priority;
         else
             throw new IllegalArgumentException("Priority is not an integer");
@@ -26,7 +27,7 @@ public enum TaskType {
         else
             throw new IllegalArgumentException("Priority is not an integer");
     }
-    public int getPriorityValue(){
+    public int getPriorityTypeValue(){
         return typePriority;
     }
     public TaskType getType(){
@@ -38,7 +39,6 @@ public enum TaskType {
      * @return whether the priority is valid or not
      */
     private static boolean validatePriority(int priority){
-        if (priority < 1 || priority >10) return false;
-        return true;
+        return priority >= 1 && priority <= 10;
     }
 }

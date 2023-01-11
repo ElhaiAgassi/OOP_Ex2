@@ -1,4 +1,5 @@
-package Ex2_b;
+package main.java.Ex2_b;
+
 
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.logging.Logger;
@@ -17,10 +18,8 @@ public class TaskTest {
      * by the order in the queue
      */
     @Test
-    public void partialTest() throws ExecutionException, InterruptedException {
+    public void partialTest() throws Exception {
         CustomExecutor customExecutor = new CustomExecutor();
-        ((ThreadPoolExecutor) customExecutor.executor).setCorePoolSize(1);
-        ((ThreadPoolExecutor) customExecutor.executor).setMaximumPoolSize(1);
         //TODO implement the classes
         for (int i = 0; i < 5; i++) {
 
@@ -40,8 +39,6 @@ public class TaskTest {
             }
             logger.info(() -> "Sum of 1 through 10 = " + sum);
 
-
-
             var math_result = customExecutor.submit(() -> {
                 return 1000 * Math.pow(1.02, 5);
             }, TaskType.COMPUTATIONAL);
@@ -50,9 +47,10 @@ public class TaskTest {
                 StringBuilder sb = new StringBuilder("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
                 return sb.reverse().toString();
             };
-            var revers_result = customExecutor.submit(testIO, TaskType.IO);
-            System.out.println(customExecutor.getQueueP().toString());
-            customExecutor.getCurrentMax();
+            System.out.println(customExecutor.getCurrentMax());
+            var revers_result = customExecutor.submit(testIO, TaskType.OTHER);
+            System.out.println(customExecutor);
+
             final String get1;
             final double get2;
             try {

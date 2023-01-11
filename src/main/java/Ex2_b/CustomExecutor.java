@@ -1,6 +1,10 @@
 package main.java.Ex2_b;
+
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static java.util.Objects.requireNonNull;
+
 /**
  * The CustomExecutor  class is responsible for managing a threadPool
  * and a priority queue of tasks, allowing you to submit new tasks and get the max priority
@@ -15,9 +19,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @see ScheduledExecutorService
  */
 
-public class CustomExecutor {
-    /** the number of threads to keep in the pool, even if they are idle to be half the number of
-     *processors available for the Java Virtual Machine (JVM)
+public class CustomExecutor extends ThreadPoolExecutor {
+    /**
+     * the number of threads to keep in the pool, even if they are idle to be half the number of
+     * processors available for the Java Virtual Machine (JVM)
      */
     private static final int MIN_THREADS = Runtime.getRuntime().availableProcessors() / 2;
     /**
@@ -28,141 +33,116 @@ public class CustomExecutor {
     /**
      * the maximum time that excess idle threads will wait for new tasks before terminating
      */
-    private static final long IDLE_TIMEOUT = 3000L; // 3 seconds in milliseconds
+    private static final long IDLE_TIMEOUT = 300L; // 300 milliseconds
+
+    private int index = 0;
+
     /**
      * priority queue to hold the queue of tasks
      */
-    private final PriorityBlockingQueue<Task<?>> queue;
-    /**
-     * Executor service to handle threads and assigns tasks to them.
-     */
-    public ExecutorService executor; //TODO Make it normal Executor, implement shutdown
+//    private final PriorityQueueThreadFactory queue;
     /**
      * Scheduler service to handle background task that periodically kills excess idle threads
      */
-    private final ScheduledExecutorService scheduler;
+
+//   private final ScheduledExecutorService scheduler;
+
+//    private final ThreadPoolExecutor executor;
     /**
      * Used to ensure that only once the executor is shut down
      */
     private final AtomicBoolean shutdown;
+    private int maxPriority = 0;
+
     /**
      * Creates a new CustomExecutor, with a thread pool, scheduler and a priority queue.
      * It also sets the core pool size and schedule a background task that periodically
      * kills excess idle threads.
      */
     public CustomExecutor() {
-        queue = new PriorityBlockingQueue<>();
-        executor = Executors.newFixedThreadPool(MAX_THREADS);
-        scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(new ExcessThreadKiller(), IDLE_TIMEOUT, IDLE_TIMEOUT, TimeUnit.MILLISECONDS);
+        super(MIN_THREADS, MAX_THREADS, IDLE_TIMEOUT, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<>());
         shutdown = new AtomicBoolean(false);
     }
 
-    /**
-     * Submits a task to the priority queue and thread pool
-     *
-     * @param task the task to submit
-     * @param <V> the type of the result returned by the task
-     * @return a Future representing pending completion of the task
-     * @throws ExecutionException if the computation threw an exception
-     * @throws InterruptedException if the current thread was interrupted while waiting
-     */
 
-//    public <V> Future<V> submit(Task<V> task) throws ExecutionException, InterruptedException {
-//        queue.put(task);
-//        FutureTask<V> futureTask = new FutureTask<>(task); /// is it legal??
-//        executor.execute(futureTask);
-////        executor.execute(() -> {
-////            try {
-////                task.call();
-////            } catch (Exception e) {
-////                throw new RuntimeException(e); // what exception throw?
-////            }
-////        });
-//        return futureTask;
-//
-//    }
+    @Override
+    public ThreadFactory getThreadFactory() {
+        return callable -> {
+            Thread t = new Thread(callable);
+            t.setDaemon(true);
+            t.setName("Thread #" + index++);
+            return t;
+        };
+    }
+    // submit = 1. get callable return future 2. execute 3. return future
 
-    public <V> Future<V> submit(Task<V> task) throws InterruptedException {
-        queue.put(task);
-        return executor.submit(task);
+    public <V> Future <V> submit(Task<V> task) throws Exception {
+        if (task.getCallable() == null) throw new NullPointerException();
+        else {
+            this.setCurrentMax(Math.max(task.getPriority(), maxPriority));
+            try {
+                execute(task);
+                return (task);
+            } catch (Exception e) {
+                throw new InterruptedException(e.getLocalizedMessage());
+            }
+        }
     }
 
     /**
-
-     Submits a callable to the priority queue and thread pool
-     @param callable the callable to submit
-     @param type the type of task
-     @param <V> the type of the result returned by the task
-     @return a Future representing pending completion of the task
-     @throws ExecutionException if the computation threw an exception
-     @throws InterruptedException if the current thread was interrupted while waiting
+     * Submits a callable to the priority queue and thread pool
+     *
+     * @param callable the callable to submit
+     * @param type     the type of task
+     * @param <V>      the type of the result returned by the task
+     * @return a Future representing pending completion of the task
+     * @throws ExecutionException   if the computation threw an exception
+     * @throws InterruptedException if the current thread was interrupted while waiting
      */
-    public <V> Future<V> submit(Callable<V> callable, TaskType type) throws ExecutionException, InterruptedException {
+    public <V> Future<V> submit(Callable<V> callable, TaskType type) throws Exception {
         return submit(Task.createTask(callable, type));
     }
 
     /**
-
-     Submits a callable to the priority queue and thread pool, with the type of task set to 'OTHER'
-     @param callable the callable to submit
-     @param <V> the type of the result returned by the task
-     @return a Future representing pending completion of the task
-     @throws ExecutionException if the computation threw an exception
-     @throws InterruptedException if the current thread was interrupted while waiting
-     @throws NullPointerException if callable is null
+     * Submits a callable to the priority queue and thread pool, with the type of task set to 'OTHER'
+     *
+     * @param callable the callable to submit
+     * @param <V>      the type of the result returned by the task
+     * @return a Future representing pending completion of the task
+     * @throws ExecutionException   if the computation threw an exception
+     * @throws NullPointerException if callable is null
      */
 
-    public <V> Future<V> submit(Callable<V> callable) throws ExecutionException, InterruptedException {
+    public <V> Future<V> submit(Callable<V> callable) {
         if (callable == null) throw new NullPointerException();
-        return submit(Task.createTask(callable));
+        try {
+            return submit(Task.createTask(callable));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * get the max priority of queued tasks
+     *
      * @return the max priority of queued tasks
      */
 
     public int getCurrentMax() {
-        int maxPriority = 0;
-        for (Task<?> future : queue) {
-            maxPriority = Math.max(maxPriority, future.getPriority());
-        }
-        return maxPriority;
+        return this.maxPriority;
     }
+
+    public void setCurrentMax(int Priority) {
+        this.maxPriority = Priority;
+    }
+
     /**
      * Terminates the scheduler and executor gracefully and sets the shutdown flag to true
      */
     public void gracefullyTerminate() {
-        scheduler.shutdownNow();
-        executor.shutdown();
         shutdown.set(true);
-    }
-
-    /**
-     * Getter for the priority queue
-     * @return the priority queue
-     */
-
-    public BlockingQueue<Task<?>> getQueueP() {
-        return queue;
-    }
-    /**
-     * An inner class to periodically kill excess idle threads
-     * private class ExcessThreadKiller implements Runnable
-     * this method is called periodically by the scheduler
-     * it gets the number of active threads in the thread pool and
-     * if the number is greater than the core, it will set the core size to the minimum of MIN_THREADS and MAX_THREADS
-     */
-
-    private class ExcessThreadKiller implements Runnable {
-        @Override
-        public void run() {
-            // the number of active threads in the thread pool using the getActiveCount()
-            int threadCount = ((ThreadPoolExecutor) executor).getActiveCount();
-            if (threadCount > MIN_THREADS) {
-                ((ThreadPoolExecutor) executor).setCorePoolSize(Math.max(MIN_THREADS, MAX_THREADS));
-            }
-        }
+        this.shutdownNow();
     }
 }
