@@ -20,7 +20,7 @@ In general: we create several text files and calculate the total number of lines
 
 •  Using ThreadPool
 
-## createTextFiles
+### createTextFiles
 
 The createTextFiles function creates a specified number of text files, each containing a random number of lines with the text "I Love Programming". The function takes in three parameters:
 
@@ -33,21 +33,21 @@ The seed and bound parameters are used to generate a random number of lines for 
 The function returns a String array containing the names of the created files. The file names are in the format "my_file1.txt", "my_file2.txt", and so on.
 ____________
 
-## getNumOfLines
+### getNumOfLines
 
 The getNumOfLines function counts the number of lines in a given array of text files. It takes in a String array containing the names of the text files and returns the total number of lines in all the files.
 
 This function reads each file in the input array line by line using a BufferedReader, and increments a counter for each line. After all the files have been processed, the final value of the counter is returned as the result.
 _____________
 
-## getNumOfLinesThreads
+### getNumOfLinesThreads
 
 The getNumOfLinesThreads function counts the number of lines in a given array of text files using a separate thread for each file. It extends the Thread class and overrides the run method to count the lines in a specific file. The function takes in a String array containing the names of the text files and returns the total number of lines in all the files.
 
 For each file in the input array, a new LineCounterThread instance is created and started. The LineCounterThread class extends Thread and has a run method that reads the file line by line and increments a counter for each line. After all the threads have completed, the final value of the counter is returned as the result.
 ______________
 
-## getNumOfLinesThreadPool
+### getNumOfLinesThreadPool
 
 The getNumOfLinesThreadPool function counts the number of lines in a given array of text files using a fixed thread pool. It creates a class that implements the Callable interface and overrides the call method to count the lines in a specific file. The function takes in a String array containing the names of the text files and returns the total number of lines in all the files.
 
@@ -57,7 +57,7 @@ After all the tasks have completed, the results are summed up to get the total n
 
 _______
 
-# Running Time
+## Running Time
 
 It is important to understand the differences in running times because it can help determine which method is most efficient and suitable for a given task.
 
@@ -84,7 +84,7 @@ As it is a small number of files, single-thread will perform the best running ti
 _______
 
 
-# UML 
+## UML 
 
 ![image](https://user-images.githubusercontent.com/92378800/211555684-786c0430-e7bb-479f-bb79-6714ca3f097f.png)
 
@@ -98,7 +98,7 @@ Create a new type that provides an asynchronous task with priority and a ThreadP
 We created a two classes:
 Task & CustomExecutor
 ____
-## Task
+### Task
 (based on the enum class we got 'TaskType')
 
 This is implements two interfaces: Callable and Comparable
@@ -115,7 +115,7 @@ and createTask(Callable<V> callable) will create a task object by providing the 
 In summary this class implements the Callable interface so that it can be used in a thread pool, and also implements the Comparable interface so that it can be sorted based on priority.
   
  ____
- ## CustomExecutor 
+ ### CustomExecutor 
   
 The CustomExecutor class is a custom implementation of a thread-pool and priority queue that manages tasks submitted to it. It utilizes the PriorityBlockingQueue class to implement the priority queue, and ExecutorService to manage the thread pool. The CustomExecutor class also uses ScheduledExecutorService to schedule a background task that periodically kills excess idle threads.
 
@@ -149,7 +149,7 @@ getCurrentMax() - method that returns the max priority of queued tasks.
   
 Overall, the Task and CustomExecutor classes demonstrate how to use threads in Java by providing a way to execute units of work concurrently, prioritize tasks, and manage the lifecycle of threads in a controlled environment.
 
-## Design Patterns
+### Design Patterns
   - Factory:
   In the Task class, where the class provides static factory methods createTask which creates new objects of the class. 
   This allows the caller to create new objects of the class without having to use the constructor directly.
@@ -158,7 +158,7 @@ Overall, the Task and CustomExecutor classes demonstrate how to use threads in J
   The template method pattern is used in the CustomExecutor class, with the method submitTask(Callable<V> task) which act as a template method that defines an           algorithm as a skeleton of methods that subclasses can override to build their own implementations, 
   but also rely on the implemented methods in the super class for the common behavior.
   
-## S.O.L.I.D
+### S.O.L.I.D
   
 In terms of SOLID principles, it appears that the Single Responsibility Principle is being followed. 
 The Task class is responsible for wrapping a callable object and providing a way to compare its priority with other tasks. 
@@ -172,6 +172,6 @@ The Task class is a generic class that implements the Callable and Comparable in
 
 The CustomExecutor is using ExecutorService and PriorityBlockingQueue classes and since those class are providing a clear interface and abstraction, it makes sure that it is using those classes in a way that any other class that implements the same interfaces and abstract classes can be used in place of the current classes.
 
-## UML
+# UML
   ![image](https://user-images.githubusercontent.com/92378800/211555593-739c7be3-dea3-4ab3-a6d1-4a71207a4ec3.png)
 
