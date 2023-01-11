@@ -1,7 +1,5 @@
 package Ex2_a;
-
 import Ex2_a.Ex2;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.Duration;

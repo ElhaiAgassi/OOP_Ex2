@@ -84,7 +84,6 @@ public class Task<V> extends FutureTask<V> implements Comparable<Task<V>>  {
     }
 
 
-
     @Override
     /**
      * Compare this task with the provided task by their priorities
@@ -96,6 +95,5 @@ public class Task<V> extends FutureTask<V> implements Comparable<Task<V>>  {
     public int compareTo(Task<V> o) {
         return Integer.compare(getPriority(), o.getPriority());
     }
-
 
 }
