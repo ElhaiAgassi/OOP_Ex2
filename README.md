@@ -1,11 +1,16 @@
 _OOP course Exercise #2_  
 _Authors [@ElhaiAgassi]() & [@Danielle Musai](https://github.com/DanielleMusai)_
 
-##                                                                        THREADS 
-##                                                               Welcome to the Ex2 project!
 
 
+# <p align="center"> __THREADS__ </p>
+                                           
+## <p align="center"> Welcome to the Ex2 project! </p>                                                        
+
+<p align="center">
 <img width="317" alt="image" src="https://user-images.githubusercontent.com/92378800/211576757-c364f245-e4bf-46ef-9fc0-0fb2920d5cba.png">
+</p>
+
 
 
 # Part A
