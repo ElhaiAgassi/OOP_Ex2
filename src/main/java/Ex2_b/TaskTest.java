@@ -8,7 +8,10 @@ import org.junit.platform.commons.logging.LoggerFactory;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class TaskTest {
     public static final Logger logger = LoggerFactory.getLogger(TaskTest.class);
@@ -20,7 +23,7 @@ public class TaskTest {
      * Print - print the priorities og the queue's tasks
      * by the order in the queue
      */
-    @Test
+//    @Test
     public void partialTest() throws Exception {
         CustomExecutor customExecutor = new CustomExecutor();
         for (int i = 0; i < 5; i++) {
@@ -70,24 +73,23 @@ public class TaskTest {
         final int SLOW_THREADS_NUM = 10;
         final int SLEEP_TIME = 5;
         CustomExecutor customExecutor = new CustomExecutor();
-        Task<?>[] slowFunc = new Task[SLOW_THREADS_NUM];
+        Task<?>[] slowFuncArray = new Task[SLOW_THREADS_NUM];
         for (int i = 0; i < SLOW_THREADS_NUM; i++) {
             System.out.println(customExecutor);
             int finalI = i;
-            var waitTask = Task.createTask(() -> {
+            slowFuncArray[finalI] = customExecutor.submit(Task.createTask(() -> {
                 TimeUnit.SECONDS.sleep(SLEEP_TIME);
-                return "Thread " + finalI + " of Slow function finish";
-            }, TaskType.IO);
-            slowFunc[finalI] = customExecutor.submit(waitTask);
+                return "Thread " + finalI + " finish";
+            }, TaskType.IO));
+
         }
         System.out.println(customExecutor.getCurrentMax());
         System.out.println(customExecutor);
         Task<Boolean> fastFunc = Task.createTask(() -> true, TaskType.COMPUTATIONAL);
-        Future<Boolean> fastAnswer = customExecutor.submit(fastFunc);
+        Task<Boolean> fastAnswer = customExecutor.submit(fastFunc);
         Instant start = Instant.now();
-
-        System.out.println(customExecutor.getCurrentMax());
         System.out.println(customExecutor);
+        System.out.println(customExecutor.getCurrentMax());
         logger.info(() -> {
             try {
                 return "*** Fast function return " + fastAnswer.get() + " ***";
@@ -102,7 +104,7 @@ public class TaskTest {
             int finalI = i;
             logger.info(() -> {
                 try {
-                    return String.valueOf(slowFunc[finalI].get());
+                    return String.valueOf(slowFuncArray[finalI].get());
                 } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
                 }

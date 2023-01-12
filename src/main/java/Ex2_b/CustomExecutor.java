@@ -1,8 +1,6 @@
 package main.java.Ex2_b;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 
 /**
  * The CustomExecutor  class is responsible for managing a threadPool
@@ -47,10 +45,7 @@ public class CustomExecutor extends ThreadPoolExecutor {
 //   private final ScheduledExecutorService scheduler;
 
 //    private final ThreadPoolExecutor executor;
-    /**
-     * Used to ensure that only once the executor is shut down
-     */
-    private final AtomicBoolean shutdown;
+
     private int maxPriority = Integer.MAX_VALUE;
 
     /**
@@ -60,7 +55,6 @@ public class CustomExecutor extends ThreadPoolExecutor {
      */
     public CustomExecutor() {
         super(MIN_THREADS, MAX_THREADS, IDLE_TIMEOUT, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<>());
-        shutdown = new AtomicBoolean(false);
     }
 
 
@@ -73,19 +67,23 @@ public class CustomExecutor extends ThreadPoolExecutor {
             return t;
         };
     }
-    // submit = 1. get callable return future 2. execute 3. return future
 
-    public <V> Task <V> submit(Task<V> task) throws Exception {
+    public <V> Task<V> submit(Task<V> task) throws Exception {
         if (task.getCallable() == null) throw new NullPointerException();
         else {
-            this.setCurrentMax(Math.min(task.getPriority(), maxPriority));
             try {
                 execute(task);
+                this.setCurrentMax(getMax());
                 return (task);
             } catch (Exception e) {
                 throw new InterruptedException(e.getLocalizedMessage());
             }
         }
+    }
+
+    private int getMax() {
+        if (this.getQueue().isEmpty()) return 0;
+        else return ((Task<?>) (this.getQueue().peek())).getPriority();
     }
 
     /**
@@ -108,7 +106,6 @@ public class CustomExecutor extends ThreadPoolExecutor {
      * @param callable the callable to submit
      * @param <V>      the type of the result returned by the task
      * @return a Future representing pending completion of the task
-     * @throws ExecutionException   if the computation threw an exception
      * @throws NullPointerException if callable is null
      */
 
@@ -141,7 +138,6 @@ public class CustomExecutor extends ThreadPoolExecutor {
      * Terminates the scheduler and executor gracefully and sets the shutdown flag to true
      */
     public void gracefullyTerminate() {
-        shutdown.set(true);
-        this.shutdownNow();
+        this.shutdown();
     }
 }
