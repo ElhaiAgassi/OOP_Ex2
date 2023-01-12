@@ -7,13 +7,9 @@ import java.util.concurrent.*;
  * and a priority queue of tasks, allowing you to submit new tasks and get the max priority
  * of the queued tasks.
  *
- * <p> It provides the ability to terminate gracefully and also schedule a background task that periodically
- * kills excess idle threads
  *
  * @author Elhai Agassi & Danielle Musai
- * @see PriorityBlockingQueue
- * @see ExecutorService
- * @see ScheduledExecutorService
+ *
  */
 
 public class CustomExecutor extends ThreadPoolExecutor {
@@ -34,29 +30,18 @@ public class CustomExecutor extends ThreadPoolExecutor {
 
     private int index = 0;
 
-    /**
-     * priority queue to hold the queue of tasks
-     */
-//    private final PriorityQueueThreadFactory queue;
-    /**
-     * Scheduler service to handle background task that periodically kills excess idle threads
-     */
-
-//   private final ScheduledExecutorService scheduler;
-
-//    private final ThreadPoolExecutor executor;
-
     private int maxPriority = Integer.MAX_VALUE;
 
-    /**
-     * Creates a new CustomExecutor, with a thread pool, scheduler and a priority queue.
-     * It also sets the core pool size and schedule a background task that periodically
-     * kills excess idle threads.
-     */
     public CustomExecutor() {
         super(MIN_THREADS, MAX_THREADS, IDLE_TIMEOUT, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<>());
     }
 
+    /**
+     * Overrides the ThreadFactory method from ThreadPoolExecutor to create daemon threads with names in the format "Thread #X",
+     * where X is an incrementing index.
+     *
+     * @return ThreadFactory that creates daemon threads with names in the format "Thread #X"
+     */
 
     @Override
     public ThreadFactory getThreadFactory() {
@@ -68,6 +53,13 @@ public class CustomExecutor extends ThreadPoolExecutor {
         };
     }
 
+    /**
+     * Submits a task with a priority to the executor.
+     *
+     * @param task the task to be submitted
+     * @return the submitted task
+     * @throws Exception if the task's callable is null
+     */
     public <V> Task<V> submit(Task<V> task) throws Exception {
         if (task.getCallable() == null) throw new NullPointerException();
         else {
@@ -81,32 +73,36 @@ public class CustomExecutor extends ThreadPoolExecutor {
         }
     }
 
+    /**
+     * Retrieves the maximum priority of tasks in the queue.
+     *
+     * @return the maximum priority of tasks in the queue, or 0 if the queue is empty
+     */
+
     private int getMax() {
         if (this.getQueue().isEmpty()) return 0;
         else return ((Task<?>) (this.getQueue().peek())).getPriority();
     }
 
     /**
-     * Submits a callable to the priority queue and thread pool
+     * Submits a task with a priority to the executor.
      *
-     * @param callable the callable to submit
-     * @param type     the type of task
-     * @param <V>      the type of the result returned by the task
-     * @return a Future representing pending completion of the task
-     * @throws ExecutionException   if the computation threw an exception
-     * @throws InterruptedException if the current thread was interrupted while waiting
+     * @param callable the callable to be submitted as a task
+     * @param type the priority of the task
+     * @return the submitted task
+     * @throws Exception if the callable is null
      */
+
     public <V> Future<V> submit(Callable<V> callable, TaskType type) throws Exception {
         return submit(Task.createTask(callable, type));
     }
 
     /**
-     * Submits a callable to the priority queue and thread pool, with the type of task set to 'OTHER'
+     * Submits a task with default priority to the executor.
      *
-     * @param callable the callable to submit
-     * @param <V>      the type of the result returned by the task
-     * @return a Future representing pending completion of the task
-     * @throws NullPointerException if callable is null
+     * @param callable the callable to be submitted as a task
+     * @return the submitted task
+     * @throws NullPointerException if the callable is null
      */
 
     public <V> Future<V> submit(Callable<V> callable) {
@@ -121,21 +117,24 @@ public class CustomExecutor extends ThreadPoolExecutor {
     }
 
     /**
-     * get the max priority of queued tasks
-     *
-     * @return the max priority of queued tasks
+     * @return the current maximum priority in the task queue
      */
-
     public int getCurrentMax() {
         return this.maxPriority;
     }
+
+    /**
+     * Sets the current maximum priority in the task queue.
+     * @param Priority the new maximum priority
+     */
 
     public void setCurrentMax(int Priority) {
         this.maxPriority = Priority;
     }
 
     /**
-     * Terminates the scheduler and executor gracefully and sets the shutdown flag to true
+     * Gracefully shuts down the executor by allowing currently running tasks to complete
+     * and not accepting new tasks.
      */
     public void gracefullyTerminate() {
         this.shutdown();

@@ -1,21 +1,17 @@
 package main.java.Ex2_b;
 
-import java.util.concurrent.Callable;
-
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 
 /**
  * The {@code Task} class represents a unit of work that can be executed in a separate thread.
- * It implements the {@link Callable} and {@link Comparable} interfaces, allowing it to be
- * used with thread pools and sorted based on priority. The task can be created by providing callable object
- * and task type using factory methods or default task type will be 'OTHER'
+ * It implements the {@link FutureTask} and {@link Comparable} interfaces, allowing it to be
+ * used with thread pools and sorted based on priority.
  *
  * @param <V> the type of the result returned by this task
  * @author Elhai Agassi & Danielle Musai
  */
 
-
-public class Task<V> extends FutureTask<V> implements Comparable<Task<V>> {
+public class Task<V> extends FutureTask<V> implements Comparable<Task<V>>  {
     /**
      * Holds the callable object that contains the unit of work to be executed
      */
@@ -41,12 +37,11 @@ public class Task<V> extends FutureTask<V> implements Comparable<Task<V>> {
     }
 
     /**
-     * Creates a task object with the provided callable object and task type.
+     * Creates an instance of the Task class with the given callable and task type.
      *
      * @param callable the callable object that contains the unit of work to be executed
-     * @param type     the type of task, which determines the priority
-     * @param <V>      the type of the result returned by the callable
-     * @return a new task object
+     * @param type the type of task, which determines the priority
+     * @return an instance of the Task class
      */
 
     public static <V> Task<V> createTask(Callable<V> callable, TaskType type) {
@@ -54,46 +49,39 @@ public class Task<V> extends FutureTask<V> implements Comparable<Task<V>> {
     }
 
     /**
-     * Creates a task object with the provided callable object and task type as 'OTHER'
+     * Creates an instance of the Task class with the given callable and default task type.
      *
      * @param callable the callable object that contains the unit of work to be executed
-     * @param <V>      the type of the result returned by the callable
-     * @return a new task object
+     * @return an instance of the Task class
      */
 
     public static <V> Task<V> createTask(Callable<V> callable) {
         return new Task<>(callable, TaskType.OTHER);
     }
-
     /**
-     * Executes the callable object and returns the result.
-     *
-     * @return result returned by callable
-     * @throws Exception the callable may throw an exception
+     * @return the callable object that contains the unit of work to be executed
      */
+
     public Callable<V> getCallable() throws Exception {
         return callable;
     }
 
     /**
-     * Get the priority value of the task.
-     *
-     * @return the priority value
+     * @return the priority of the task
      */
 
     public int getPriority() {
-        return type.getPriorityValue();
+        return type.getPriorityTypeValue();
     }
 
-
-    @Override
     /**
-     * Compare this task with the provided task by their priorities
+     * Compares the priority of the current task to another task passed as a parameter.
      *
-     * @param o the task to compare to
-     * @return a negative integer, zero, or a positive integer as this object is less than,
-     * equal to, or greater than the specified object.
+     * @param o the other task to compare to
+     * @return a negative integer, zero, or a positive integer as the current task's priority is less than,
+     * equal to, or greater than the other task's priority
      */
+
     public int compareTo(Task<V> o) {
         return Integer.compare(getPriority(), o.getPriority());
     }
