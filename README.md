@@ -90,7 +90,7 @@ As it is a small number of files, single-thread will perform the best running ti
 _______
 
 
-## UML 
+# <p align="center"> UML </p>  
 
 ![image](https://user-images.githubusercontent.com/92378800/211555684-786c0430-e7bb-479f-bb79-6714ca3f097f.png)
 
@@ -178,6 +178,6 @@ The Task class is a generic class that implements the Callable and Comparable in
 
 The CustomExecutor is using ExecutorService and PriorityBlockingQueue classes and since those class are providing a clear interface and abstraction, it makes sure that it is using those classes in a way that any other class that implements the same interfaces and abstract classes can be used in place of the current classes.
 
-# UML
-  ![image](https://user-images.githubusercontent.com/92378800/211555593-739c7be3-dea3-4ab3-a6d1-4a71207a4ec3.png)
-
+# <p align="center"> UML </p>  
+  
+![image](https://user-images.githubusercontent.com/92378800/212045987-522b6fb2-7db9-4d57-a13e-63a63c20c1cf.png)
