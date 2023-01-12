@@ -180,4 +180,4 @@ The CustomExecutor is using ExecutorService and PriorityBlockingQueue classes an
 
 # <p align="center"> UML </p>  
   
-![image](https://user-images.githubusercontent.com/92378800/212045987-522b6fb2-7db9-4d57-a13e-63a63c20c1cf.png)
+![image](https://user-images.githubusercontent.com/92378800/212049460-c0725938-2cfb-45ba-a5e1-dd32b8e96d82.png)
