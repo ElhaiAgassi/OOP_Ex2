@@ -101,8 +101,8 @@ _________
 Our goal at this part of the project is to  create a new two types that extend the functionality of Javas Concurrency Framework.
 Create a new type that provides an asynchronous task with priority and a ThreadPool type that supports tasks priority.
 
-We created a two classes:
-Task & CustomExecutor
+#### We created a two classes:
+#### Task & CustomExecutor
 ____
 ### Task
 (based on the enum class we got 'TaskType')
@@ -163,7 +163,7 @@ Overall, the Task and CustomExecutor classes demonstrate how to use threads in J
 
 
 ### Design Patterns
-##### Factory:
+#### Factory:
 The Factory Method pattern is a creational design pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created.
 
 In this case, the CustomExecutor class uses the factory method pattern in the method submit(Callable<V> callable, TaskType type) and submit(Callable<V> callable) where the callable passed to the method is used to create a new task object by calling Task.createTask(callable, type) or Task.createTask(callable) respectively.
@@ -171,7 +171,7 @@ In this case, the CustomExecutor class uses the factory method pattern in the me
 In the Task class, where the class provides static factory methods createTask which creates new objects of the class. 
 In this case, the Factory Method pattern allows the CustomExecutor class to create Task objects without having to know the specific implementation of the Task class, and it also allows subclasses of the Task class to be used without modifying the CustomExecutor class.
 
-##### Template:
+#### Template:
 This pattern is a behavioral design pattern that defines the skeleton of an algorithm in a method, called template method, deferring some steps to subclasses. In this case, the ThreadPoolExecutor class defines the skeleton of the algorithm for managing a pool of threads, and the CustomExecutor class is a subclass that overrides some of the methods to add additional functionality.
   
 ThreadPoolExecutor class defines the skeleton of the algorithm for managing a pool of threads, providing the basic functionality such as maintaining a queue of tasks, creating and managing threads, and controlling the number of threads in the pool. CustomExecutor class, which is a subclass of ThreadPoolExecutor, overrides some of the methods to add additional functionality such as the ability to submit tasks with a priority and track the maximum priority of tasks in the queue.
