@@ -101,29 +101,31 @@ _________
 Our goal at this part of the project is to  create a new two types that extend the functionality of Javas Concurrency Framework.
 Create a new type that provides an asynchronous task with priority and a ThreadPool type that supports tasks priority.
 
-We created a two classes:
-Task & CustomExecutor
+#### We created a two classes:
+#### Task & CustomExecutor
 ____
 ### Task
 (based on the enum class we got 'TaskType')
 
-This is implements two interfaces: Callable and Comparable
-*Callable is an interface that's similar to Runnable, but it can return a value or throw an exception.
-*Comparable is an interface that allows an object to be compared to other objects of the same type.
-The compareTo() method, which is also defined in the Comparable interface, is overridden here to compare the priority of the current task to that of another task passed in as an argument. 
-This is important when multiple tasks are queued and we want to ensure that the most important tasks are executed first.
-
+The Task class is a generic class that represents a unit of work that can be executed in a separate thread.
+It extends the FutureTask class and implements the Comparable interface. This allows it to be used with thread pools and sorted based on priority. 
 The priority is determined by the TaskType enum, which is passed in to the constructor and stored as a field.
 
-The class also has two static methods to create a Task object. createTask(Callable<V> callable, Ex2_b.TaskType type) will create a task object by providing the callable object and task type,
-and createTask(Callable<V> callable) will create a task object by providing the callable object and default task type as Ex2_b.TaskType.OTHER.
-  
-In summary this class implements the Callable interface so that it can be used in a thread pool, and also implements the Comparable interface so that it can be sorted based on priority.
-  
+The class has two instance variables, a callable object that contains the unit of work to be executed and a task type that determines the priority of the task.
+The class has a constructor that takes in a callable object and a task type, and assigns them to the respective instance variables. 
+The class also has two static factory methods, createTask(Callable, TaskType) and createTask(Callable), 
+that return new instances of the Task class.
+ 
+The class also has getter methods for the callable and priority instance variables and a compareTo() method that compares the priority of the current task to another task passed as a parameter. 
+This class is useful for creating tasks that need to be executed in a separate thread and for managing the order in which these tasks are executed based on their priority.
+
+
  ____
  ### CustomExecutor 
   
-The CustomExecutor class is a custom implementation of a thread-pool and priority queue that manages tasks submitted to it. It utilizes the PriorityBlockingQueue class to implement the priority queue, and ExecutorService to manage the thread pool. The CustomExecutor class also uses ScheduledExecutorService to schedule a background task that periodically kills excess idle threads.
+  
+The CustomExecutor class is a subclass of ThreadPoolExecutor, which is a built-in Java class for managing a pool of threads for executing tasks. 
+The CustomExecutor class adds some additional functionality on top of the basic functionality provided by ThreadPoolExecutor.
 
 The class has several constant variables like:
   
@@ -134,12 +136,6 @@ The class has several constant variables like:
   available for the Java Virtual Machine (JVM) minus 1
  
  * IDLE_TIMEOUT = 3000L - the maximum time that excess idle threads will wait for new tasks before terminating
-  
- These 3 values are used to configure the thread pool and the background task for killing excess idle threads.
-
-The class also maintains a state variable shutdown which is an instance of AtomicBoolean which is used to ensure that only once the executor is shut down.
-
-When creating a new instance of the CustomExecutor class, it initializes a new PriorityBlockingQueue, creates a fixed thread pool using Executors.newFixedThreadPool(), creates a scheduled thread pool using Executors.newScheduledThreadPool(), schedules a task that kills excess idle threads, and sets the atomic boolean shutdown to false.
 
 When we want to execute a task, we can use the CustomExecutor class's submit() method to add it to the queue.
 The CustomExecutor will then take care of getting a thread from the pool and running the task.
@@ -150,34 +146,81 @@ The submit method:
 - An operation that may return a value and a TaskType. It will then be used for creating a
   Task instance
 
+The getMax() method retrieves the maximum priority of tasks in the queue. It does this by calling the peek() method on the queue of tasks, 
+which returns the first element in the queue without removing it.
+It then retrieves the priority of this task by calling the getPriority() method on it. 
+If the queue is empty, the method returns 0.
+
+The getCurrentMax() method retrieves the current maximum priority of tasks in the queue that have been submitted to the executor.
+
+The setCurrentMax() method is used to set the current maximum priority of tasks in the queue. 
+It takes an integer representing the priority as a parameter and sets the maxPriority variable to that value. 
+This method is typically called when a new task is submitted to the executor, in order to update the current maximum priority.
+
 gracefullyTerminate() - method which is used to shutdown the scheduler and executor gracefully and sets the shutdown flag to true. 
-getCurrentMax() - method that returns the max priority of queued tasks.
   
-Overall, the Task and CustomExecutor classes demonstrate how to use threads in Java by providing a way to execute units of work concurrently, prioritize tasks, and manage the lifecycle of threads in a controlled environment.
+Overall, the Task and CustomExecutor classes demonstrate how to use threads in Java by providing a way to execute units of work concurrently, prioritize tasks, and manage the lifecycle of threads.
+
 
 ### Design Patterns
-  - Factory:
-  In the Task class, where the class provides static factory methods createTask which creates new objects of the class. 
-  This allows the caller to create new objects of the class without having to use the constructor directly.
+#### Factory:
+The Factory Method pattern is a creational design pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created.
+
+In this case, the CustomExecutor class uses the factory method pattern in the method submit(Callable<V> callable, TaskType type) and submit(Callable<V> callable) where the callable passed to the method is used to create a new task object by calling Task.createTask(callable, type) or Task.createTask(callable) respectively.
+
+In the Task class, where the class provides static factory methods createTask which creates new objects of the class. 
+In this case, the Factory Method pattern allows the CustomExecutor class to create Task objects without having to know the specific implementation of the Task class, and it also allows subclasses of the Task class to be used without modifying the CustomExecutor class.
+
+#### Template:
+This pattern is a behavioral design pattern that defines the skeleton of an algorithm in a method, called template method, deferring some steps to subclasses. In this case, the ThreadPoolExecutor class defines the skeleton of the algorithm for managing a pool of threads, and the CustomExecutor class is a subclass that overrides some of the methods to add additional functionality.
   
-  - Template:
-  The template method pattern is used in the CustomExecutor class, with the method submitTask(Callable<V> task) which act as a template method that defines an           algorithm as a skeleton of methods that subclasses can override to build their own implementations, 
-  but also rely on the implemented methods in the super class for the common behavior.
+ThreadPoolExecutor class defines the skeleton of the algorithm for managing a pool of threads, providing the basic functionality such as maintaining a queue of tasks, creating and managing threads, and controlling the number of threads in the pool. CustomExecutor class, which is a subclass of ThreadPoolExecutor, overrides some of the methods to add additional functionality such as the ability to submit tasks with a priority and track the maximum priority of tasks in the queue.
+
+The template method pattern allows the ThreadPoolExecutor to define the basic structure and behavior of a thread pool, while also allowing subclasses like CustomExecutor to customize and extend that behavior.
   
 ### S.O.L.I.D
   
-In terms of SOLID principles, it appears that the Single Responsibility Principle is being followed. 
-The Task class is responsible for wrapping a callable object and providing a way to compare its priority with other tasks. 
-The CustomExecutor class is responsible for managing the thread pool and task queue.
-Also, there are some indication of open-closed principle since the class Task is open for extension and closed for modification, and they are using Factory Method to generate the object .
-The Liskov Substitution Principle states that objects of a superclass should be able to be replaced with objects of a subclass without affecting the correctness of the program.
+##### These principles are:
 
-In this 2 classes, this is demonstrated by the use of interfaces and abstract classes.
+- Single Responsibility Principle
+- Open-Closed Principle
+- Liskov Substitution Principle 
+- Interface Segregation Principle 
+- Dependency Inversion Principle
 
-The Task class is a generic class that implements the Callable and Comparable interfaces. This allows it to be used as a replacement for any other class that also implements these interfaces, as long as it meets the same contract. In other words, it guarantees that any class that implements Callable and Comparable can be used in place of Task.
+The CustomExecutor class and its parent class ThreadPoolExecutor maintains to some of these principles.
 
-The CustomExecutor is using ExecutorService and PriorityBlockingQueue classes and since those class are providing a clear interface and abstraction, it makes sure that it is using those classes in a way that any other class that implements the same interfaces and abstract classes can be used in place of the current classes.
+- Single Responsibility Principle :
+  
+This principle states that a class should have one, and only one, reason to change.
+The CustomExecutor class has a single responsibility, which is to manage a thread pool and a priority queue of tasks, 
+allowing you to submit new tasks and get the max priority of the queued tasks.
+
+- Open-Closed Principle: 
+  
+This principle states that the behavior of a class can be extended without modifying its source code.
+The CustomExecutor class is open for extension and closed for modification. 
+It allows for additional functionality to be added without modifying the existing code.
+
+- Liskov Substitution Principle:
+  
+This principle states that objects of a superclass should be able to be replaced with objects of a subclass without affecting the correctness of the program. 
+The CustomExecutor class is a subtype of ThreadPoolExecutor, it can be used as a substitute for ThreadPoolExecutor without any modification.
+
+- Interface Segregation Principle :
+  
+This principle states that a class should not be forced to implement interfaces it does not use.
+The CustomExecutor class has a few methods that are specific to its own functionality and not related to the basic functionality of ThreadPoolExecutor.
+
+- Dependency Inversion Principle:
+  
+This principle states that the code should be organized in a way that high-level modules depend on interfaces rather than concrete implementations. 
+The CustomExecutor class depends on the ThreadPoolExecutor class and the Task class, and it's not dependent on the specific implementation of those classes,
+ it only depends on their interfaces.
+
+In general, the CustomExecutor class and its parent class ThreadPoolExecutor follow some of the SOLID principles and make the code more maintainable & flexible.
+
 
 # <p align="center"> UML </p>  
   
-![image](https://user-images.githubusercontent.com/92378800/212049460-c0725938-2cfb-45ba-a5e1-dd32b8e96d82.png)
+![image](https://user-images.githubusercontent.com/92378800/212168628-bcc445dd-f9e0-4891-b518-4b530ff3424b.png)
