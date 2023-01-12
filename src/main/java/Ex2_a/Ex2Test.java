@@ -1,4 +1,4 @@
-package Ex2_a;
+package main.java.Ex2_a;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;

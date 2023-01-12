@@ -51,7 +51,7 @@ public class CustomExecutor extends ThreadPoolExecutor {
      * Used to ensure that only once the executor is shut down
      */
     private final AtomicBoolean shutdown;
-    private int maxPriority = 0;
+    private int maxPriority = Integer.MAX_VALUE;
 
     /**
      * Creates a new CustomExecutor, with a thread pool, scheduler and a priority queue.
@@ -75,10 +75,10 @@ public class CustomExecutor extends ThreadPoolExecutor {
     }
     // submit = 1. get callable return future 2. execute 3. return future
 
-    public <V> Future <V> submit(Task<V> task) throws Exception {
+    public <V> Task <V> submit(Task<V> task) throws Exception {
         if (task.getCallable() == null) throw new NullPointerException();
         else {
-            this.setCurrentMax(Math.max(task.getPriority(), maxPriority));
+            this.setCurrentMax(Math.min(task.getPriority(), maxPriority));
             try {
                 execute(task);
                 return (task);

@@ -1,4 +1,4 @@
-package Ex2_a;
+package main.java.Ex2_a;
 
 import java.io.*;
 import java.util.ArrayList;
